@@ -2,7 +2,7 @@ function Home() {
 
   return (
     <div>
-      <img class="alignnone wp-image-13549 size-full" src="https://rehmateshereen.com/wp-content/uploads/2020/01/banner-Rshree-Hyderabadi-coffee-cake.jpg" width="1348" height="585" />
+      <img class="alignnone wp-image-13549 size-full" src="https://rehmateshereen.com/wp-content/uploads/2020/01/banner-Rshree-Hyderabadi-coffee-cake.jpg" alt="" width="1348" height="585" />
       
       <hr />
       <div class="card1">
