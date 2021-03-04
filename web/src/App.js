@@ -13,8 +13,10 @@ import {
 import Home from "./components/home/home.jsx"
 import Login from "./components/login/login.jsx"
 import Signup from "./components/signup/signup.jsx"
-import Dashboard from "./components/dashboard/dashboard.jsx"
-import Cart from "./components/cart/cart"
+import AdminDashboard from "./components/admin/addProducts"
+import AddProducts from "./components/admin/adminDashboard"
+// import Dashboard from "./components/dashboard/dashboard.jsx"
+// import Cart from "./components/cart/cart"
 
 var FontAwesome = require('react-fontawesome')
 
@@ -34,67 +36,46 @@ function App() {
             <Link to="/" className="first">Home</Link>
             <Link to="/login" className="one">log In</Link>
             <Link to="/signup" className="two">Sign Up</Link>
+            <Link to="/addProduct" className="two">addProducts</Link>
+            <Link to="/AdminDashboard" className="two">AdminDashboard</Link>
             <Link to="/dashboard" className="three"><FontAwesome className="fas fa-user-circle" /></Link>
             <Link to="/cart" className="three"><FontAwesome className="fas fa-shopping-cart" /></Link>
           </nav>
         </div>
 
-        {(globalState.loginStatus === false) ?
-          <>
+        {globalState.role === null ?
+          <div>
             <Switch>
-
-              <Route exact={true} path="/">
-                <Home />
-              </Route>
-
-              <Route exact={true} path="/login">
-                <Login />
-              </Route>
-
-              <Route exact={true} path="/signup">
-                <Signup />
-              </Route>
-
-              <Route path="/dashboard">
-                <Signup />
-              </Route>
-
-              <Route path="/cart">
-                <Login />
-              </Route>
-
-            </Switch>
-          </>
-          : null}
-
-        {(globalState.loginStatus === true) ?
-
-          <>
-            <Route exact path="/">
-              <Home />
-            </Route>
-
-            <Route path="/dashboard">
-              <Dashboard />
-            </Route>
-
-            <Route path="/cart">
-              <Cart />
-            </Route>
-
-            <Route path="/login">
-              <Dashboard />
-            </Route>
-
-            <Route path="/signup">
-              <Dashboard />
-            </Route>
-
-            <Route path="*">
+              <Route exact path="/" component={Home} />
+              <Route path="/login" component={Login} />
+              <Route path="/signup" component={Signup} />
+              {/* <Route path="/forgetpw" component={ForgetPw} /> */}
+              <Route path="*" />
               <Redirect to="/" />
-            </Route>
-          </>
-          : null}
+              <Route />
+            </Switch>
+          </div> : null}
+
+        {globalState.role === "user" ?
+          <>
+            <Route exact path="/" component={Home} />
+            {/* <Route path="/basket" component={Basket} /> */}
+            {/* <Route path="/myorders" component={MyOrders} /> */}
+            {/* <Route path="/checkoutform" component={CheckOutForm} /> */}
+            <Route path="*" />
+            <Redirect to="/" />
+            <Route />
+          </> : null
+        }
+        {globalState.role === "admin" ?
+          <>
+            <Route  path="/AdminDashboard" component={AdminDashboard} />
+            <Route  path="/addProduct" component={AddProducts} />
+            <Route path="*" />
+            <Redirect to="/" />
+            <Route />
+          </> : null
+        }
       </Router>
 
 

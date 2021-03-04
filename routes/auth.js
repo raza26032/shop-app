@@ -13,8 +13,7 @@ router.post("/signup", (req, res, next) => {
     if (!req.body.name ||
         !req.body.email ||
         !req.body.password ||
-        !req.body.phone ||
-        req.body.gender) {
+        !req.body.phone) {
 
         res.status(403).send(`
             please send name, email, passwod, phone and gender in json body.
@@ -30,17 +29,16 @@ router.post("/signup", (req, res, next) => {
     }
 
     foodUserModel.findOne({ email: req.body.email },
-        function(err, doc) {
+        function (err, doc) {
             if (!err && !doc) {
 
-                bcrypt.stringToHash(req.body.password).then(function(hash) {
+                bcrypt.stringToHash(req.body.password).then(function (hash) {
 
                     var newUser = new foodUserModel({
                         "name": req.body.name,
                         "email": req.body.email,
                         "password": hash,
                         "phone": req.body.phone,
-                        "gender": req.body.gender,
                     })
                     newUser.save((err, data) => {
                         if (!err) {
@@ -78,28 +76,28 @@ router.post("/login", (req, res, next) => {
             e.g:
             {
                 "email": "ahmed@gmail.com",
-                "password": "123",
+                "password": "12345678",
             }`)
         return;
     }
 
     foodUserModel.findOne({ email: req.body.email },
-        function(err, user) {
+        function (err, user) {
             if (err) {
                 res.status(500).send({
                     message: "an error occured: " + JSON.stringify(err)
                 });
             } else if (user) {
-                req.body.userData = user
                 bcrypt.varifyHash(req.body.password, user.password).then(isMatched => {
                     if (isMatched) {
-                        console.log("matched");
+                        console.log("matched", user );
 
                         var token =
                             jwt.sign({
                                 id: user._id,
                                 name: user.name,
                                 email: user.email,
+                                role: user.role
                             }, SERVER_SECRET)
 
                         res.cookie('jToken', token, {
@@ -115,9 +113,10 @@ router.post("/login", (req, res, next) => {
                                 email: user.email,
                                 phone: user.phone,
                                 gender: user.gender,
+                                role: user.role
                             }
                         });
-
+                        
 
                     } else {
                         console.log("not matched");
@@ -137,9 +136,11 @@ router.post("/login", (req, res, next) => {
         });
 })
 router.post("/logout", (req, res, next) => {
-    // console.log(req.body) 
-    res.clearCookie('jToken')
-
+    res.clearCookie('jToken');
+    res.cookie('jToken', "", {
+        maxAge: 86400000,
+        httpOnly: true
+    });
     res.send("logout success");
 })
 
@@ -161,7 +162,7 @@ router.post('/forget-password', (req, res, next) => {
                 otp: otp
             }).then((data) => {
                 client.sendEmail({
-                    "From": "ahmedraza_student@sysborg.com",
+                    "From": "jahanzaib_student@sysborg.com",
                     "To": req.body.email,
                     "Subject": "Reset Your Password",
                     "Textbody": `Here is your Reset password code : ${otp}`
@@ -211,8 +212,8 @@ router.post('/forget-password-2', (req, res, next) => {
                     const diff = nowDate - otpIat;
                     if (otpData.otp == req.body.otp && diff < 300000) {
                         otpData.remove();
-                        bcrypt.stringToHash(req.body.newPassword).then(function(hash) {
-                            user.update({ password: hash }, {}, function(err, data) {
+                        bcrypt.stringToHash(req.body.newPassword).then(function (hash) {
+                            user.update({ password: hash }, {}, function (err, data) {
                                 res.send({
                                     status: 200,
                                     message: "Password updated"
@@ -237,7 +238,6 @@ router.post('/forget-password-2', (req, res, next) => {
         }
     })
 })
-
 function generetOtp(min, max) {
     return Math.random() * (max - min) + min;
 }

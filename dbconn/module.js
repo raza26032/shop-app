@@ -29,7 +29,7 @@ var foodUserSchema = new mongoose.Schema({
     "email": String,
     "password": String,
     "phone": String,
-    "gender": String,
+    "role": { "type": String, "default": "user" },
     "createdOn": { "type": Date, "default": Date.now },
     "activeSince": Date
 });
@@ -43,7 +43,31 @@ var foodResetPassword = new mongoose.Schema({
 });
 var foodOtpModel = mongoose.model("foodotp", foodResetPassword);
 
+var foodOrderSchema = new mongoose.Schema({
+    "name": String,
+    "email": String,
+    "phone": String,
+    "status": String,
+    "address": String,
+    "total": String,
+    "orders": Array,
+    "createdOn": { "type": Date, "default": Date.now },
+});
+var foodOrderModel = mongoose.model("orders", foodOrderSchema);
+var foodProductSchema = new mongoose.Schema({
+    "name": String,
+    "image": String,
+    "stock": Number,
+    "price": Number,
+    "description": String,
+    "isAvailable": String,
+    "createdOn": { "type": Date, "default": Date.now },
+});
+var foodProductModel = mongoose.model("products", foodProductSchema);
+
 module.exports = {
     foodUserModel: foodUserModel,
     foodOtpModel: foodOtpModel,
+    foodOrderModel: foodOrderModel,
+    foodProductModel: foodProductModel
 }

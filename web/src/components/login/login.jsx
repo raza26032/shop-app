@@ -45,10 +45,6 @@ function Login() {
             <div className="limiter">
                 <div className="container-login100">
                     <div className="wrap-login100">
-                        <div className="login100-pic js-tilt" data-tilt>
-                            {/* <img src="https://thekababjeesbakers.com/wp-content/uploads/2020/03/Mix-Mithai-Box.jpg" alt="IMG" /> */}
-                        </div>
-
                         <form action="#" className="login100-form validate-form" onSubmit={login} >
                             <span className="login100-form-title">
                                 Log In<p>It's quick and easy.</p>
