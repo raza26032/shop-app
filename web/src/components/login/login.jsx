@@ -22,10 +22,12 @@ function Login() {
             },
             withCredentials: true
         }).then((response) => {
+            console.log(response)
             if (response.data.status === 200) {
                 setGlobalState(prev => ({
                     ...prev,
                     loginStatus: true,
+                    role: response.data.user.role
                 }))
             }
             else {

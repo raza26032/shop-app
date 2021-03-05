@@ -99,7 +99,7 @@ router.post("/login", (req, res, next) => {
                                 email: user.email,
                                 role: user.role
                             }, SERVER_SECRET)
-
+                            console.log(token)
                         res.cookie('jToken', token, {
                             maxAge: 86400000,
                             httpOnly: true

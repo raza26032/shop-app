@@ -22,6 +22,7 @@ export function GlobalStateProvider({ children }) {
       withCredentials: true
     })
       .then((res) => {
+        console.log(res)
         if (res.data.status === 200) {
           setData((prev) => ({
             ...prev,
